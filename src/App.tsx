@@ -6,6 +6,12 @@ import LoginPage from "@/pages/login"
 import ProfilePage from "@/pages/profile"
 import AdminLoginPage from "@/pages/admin/login"
 import AdminDashboard from "@/pages/admin/dashboard"
+import AdminAccounts from "@/pages/admin/accounts"
+import AdminTokens from "@/pages/admin/tokens"
+import AdminUsers from "@/pages/admin/users"
+import AdminBlacklist from "@/pages/admin/blacklist"
+import AdminRecords from "@/pages/admin/records"
+import AdminConfig from "@/pages/admin/config"
 import { useEffect } from "react"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -14,22 +20,21 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function AdminProtectedRoute({ children }: { children: React.ReactNode }) {
-  const isAdminLoggedIn = !!localStorage.getItem("admin_token")
-  return isAdminLoggedIn ? <AdminLayout>{children}</AdminLayout> : <Navigate to="/admin/login" replace />
+  const isAdminLoggedIn = !!localStorage.getItem("admin_password")
+  return isAdminLoggedIn
+    ? <AdminLayout>{children}</AdminLayout>
+    : <Navigate to="/admin/login" replace />
 }
 
 function App() {
   useEffect(() => {
-    // Initialize theme from localStorage
     const savedTheme = localStorage.getItem("theme")
     if (savedTheme === "dark") {
       document.documentElement.classList.add("dark")
     } else if (savedTheme === "light") {
       document.documentElement.classList.remove("dark")
     } else {
-      // Default to system preference
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-      if (prefersDark) {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
         document.documentElement.classList.add("dark")
       }
     }
@@ -37,45 +42,32 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-background">
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <ProfilePage />
-              </ProtectedRoute>
-            }
-          />
+      <Routes>
+        {/* User-facing routes with Navbar */}
+        <Route path="/" element={<><Navbar /><HomePage /></>} />
+        <Route path="/login" element={<><Navbar /><LoginPage /></>} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Navbar /><ProfilePage />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLoginPage />} />
-          <Route
-            path="/admin"
-            element={
-              <AdminProtectedRoute>
-                <AdminDashboard />
-              </AdminProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/*"
-            element={
-              <AdminProtectedRoute>
-                <div className="p-8">
-                  <h1 className="text-2xl font-bold mb-4">Coming Soon</h1>
-                  <p className="text-muted-foreground">
-                    This admin page is under construction.
-                  </p>
-                </div>
-              </AdminProtectedRoute>
-            }
-          />
-        </Routes>
-      </div>
+        {/* Admin routes */}
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
+        <Route path="/admin/accounts" element={<AdminProtectedRoute><AdminAccounts /></AdminProtectedRoute>} />
+        <Route path="/admin/tokens" element={<AdminProtectedRoute><AdminTokens /></AdminProtectedRoute>} />
+        <Route path="/admin/users" element={<AdminProtectedRoute><AdminUsers /></AdminProtectedRoute>} />
+        <Route path="/admin/blacklist" element={<AdminProtectedRoute><AdminBlacklist /></AdminProtectedRoute>} />
+        <Route path="/admin/records" element={<AdminProtectedRoute><AdminRecords /></AdminProtectedRoute>} />
+        <Route path="/admin/config" element={<AdminProtectedRoute><AdminConfig /></AdminProtectedRoute>} />
+
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </BrowserRouter>
   )
 }

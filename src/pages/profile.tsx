@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import api from "@/lib/api"
-import type { ApiResponse, UserProfile, PaginatedResponse, Record } from "@/types"
+import type { ApiResponse, UserProfile, PaginatedResponse, ParseRecord } from "@/types"
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<UserProfile | null>(null)
-  const [history, setHistory] = useState<Record[]>([])
+  const [history, setHistory] = useState<ParseRecord[]>([])
   const [loading, setLoading] = useState(true)
   const [page, setPage] = useState(1)
   const [total, setTotal] = useState(0)
@@ -30,7 +29,7 @@ export default function ProfilePage() {
   const loadHistory = async () => {
     setLoading(true)
     try {
-      const { data } = await api.get<ApiResponse<PaginatedResponse<Record>>>(
+      const { data } = await api.get<ApiResponse<PaginatedResponse<ParseRecord>>>(
         `/user/history?page=${page}&limit=10`
       )
       setHistory(data.data.list)

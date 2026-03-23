@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Database, Key, Users, FileText } from "lucide-react"
 import api from "@/lib/api"
-import type { ApiResponse, PaginatedResponse, Account, Token, User } from "@/types"
+import type { ApiResponse, PaginatedResponse, Account, Token, User, ParseRecord } from "@/types"
 
 interface Stats {
   accounts: number
@@ -22,7 +22,7 @@ export default function AdminDashboard() {
       api.get<ApiResponse<PaginatedResponse<Account>>>("/admin/account?limit=1", authHeader),
       api.get<ApiResponse<PaginatedResponse<Token>>>("/admin/token?limit=1", authHeader),
       api.get<ApiResponse<PaginatedResponse<User>>>("/admin/user?limit=1", authHeader),
-      api.get<ApiResponse<PaginatedResponse<Record>>>("/admin/record?limit=1", authHeader),
+      api.get<ApiResponse<PaginatedResponse<ParseRecord>>>("/admin/record?limit=1", authHeader),
     ]).then(([accounts, tokens, users, records]) => {
       setStats({
         accounts: accounts.data.data.total,

@@ -48,7 +48,7 @@ export interface ParseRequest {
   fs_id: number[]
 }
 
-export interface Record {
+export interface ParseRecord {
   id: number
   ip: string
   fingerprint: string
@@ -65,7 +65,7 @@ export interface Account {
   baidu_name: string
   uk: string
   account_type: 'cookie' | 'open_platform' | 'enterprise_cookie' | 'download_ticket'
-  account_data: Record<string, any>
+  account_data: { [key: string]: unknown }
   switch: boolean
   reason: string
   used_count: number
@@ -83,6 +83,7 @@ export interface Token {
   size: number
   used_size: number
   switch: boolean
+  reason?: string
   created_at: string
 }
 
