@@ -6,7 +6,6 @@ import LoginPage from "@/pages/login"
 import ProfilePage from "@/pages/profile"
 import AdminDashboard from "@/pages/admin/dashboard"
 import AdminAccounts from "@/pages/admin/accounts"
-import AdminTokens from "@/pages/admin/tokens"
 import AdminUsers from "@/pages/admin/users"
 import AdminBlacklist from "@/pages/admin/blacklist"
 import AdminRecords from "@/pages/admin/records"
@@ -57,7 +56,6 @@ function App() {
         {/* Admin routes */}
         <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/admin/accounts" element={<AdminProtectedRoute><AdminAccounts /></AdminProtectedRoute>} />
-        <Route path="/admin/tokens" element={<AdminProtectedRoute><AdminTokens /></AdminProtectedRoute>} />
         <Route path="/admin/users" element={<AdminProtectedRoute><AdminUsers /></AdminProtectedRoute>} />
         <Route path="/admin/blacklist" element={<AdminProtectedRoute><AdminBlacklist /></AdminProtectedRoute>} />
         <Route path="/admin/records" element={<AdminProtectedRoute><AdminRecords /></AdminProtectedRoute>} />

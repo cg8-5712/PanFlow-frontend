@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 import {
-  Users, Key, Shield, Settings, FileText,
+  Users, Shield, Settings, FileText,
   LogOut, Database, LayoutDashboard
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button"
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/accounts", label: "Accounts", icon: Database },
-  { href: "/admin/tokens", label: "Tokens", icon: Key },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/blacklist", label: "Blacklist", icon: Shield },
   { href: "/admin/records", label: "Records", icon: FileText },
@@ -22,8 +21,10 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    localStorage.removeItem("admin_token")
-    navigate("/admin/login")
+    localStorage.removeItem("access_token")
+    localStorage.removeItem("refresh_token")
+    localStorage.removeItem("user_type")
+    navigate("/login")
   }
 
   return (
