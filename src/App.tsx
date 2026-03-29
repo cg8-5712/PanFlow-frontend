@@ -20,7 +20,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function AdminProtectedRoute({ children }: { children: React.ReactNode }) {
-  const isAdminLoggedIn = !!localStorage.getItem("admin_password")
+  const isAdminLoggedIn = !!localStorage.getItem("admin_token")
   return isAdminLoggedIn
     ? <AdminLayout>{children}</AdminLayout>
     : <Navigate to="/admin/login" replace />

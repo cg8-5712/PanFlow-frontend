@@ -4,15 +4,17 @@ import type { ApiResponse, PaginatedResponse } from "@/types"
 
 const API_BASE = "/api/v1"
 
-// Admin API: uses admin_password in headers
+// Admin API: uses admin JWT in Authorization header
 export const adminApi = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },
 })
 
 adminApi.interceptors.request.use((config) => {
-  const pw = localStorage.getItem("admin_password") ?? ""
-  config.headers["admin_password"] = pw
+  const token = localStorage.getItem("admin_token") ?? ""
+  if (token) {
+    config.headers["Authorization"] = `Bearer ${token}`
+  }
   return config
 })
 

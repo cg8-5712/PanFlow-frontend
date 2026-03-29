@@ -18,50 +18,45 @@ export default function AdminLoginPage() {
     setError("")
     setLoading(true)
     try {
-      // API: POST /admin/check_password with admin_password in header
-      await axios.post<ApiResponse<null>>(
-        "/api/v1/admin/check_password",
-        {},
-        { headers: { admin_password: password } }
+      const { data } = await axios.post<ApiResponse<{ token: string; expires_at: string }>>(
+        "/api/v1/admin/login",
+        { admin_password: password }
       )
-      localStorage.setItem("admin_password", password)
+      localStorage.setItem("admin_token", data.data.token)
       navigate("/admin")
-    } catch (err: any) {
-      setError(err.response?.data?.message ?? "Invalid password")
+    } catch {
+      setError("Invalid password")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="text-3xl font-heading font-bold text-primary mb-1">PanFlow</div>
-          <CardTitle className="text-xl">Admin Panel</CardTitle>
-          <CardDescription>Enter admin password to continue</CardDescription>
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle>Admin Login</CardTitle>
+          <CardDescription>Enter your admin password to continue</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Admin Password</label>
-              <Input
-                type="password"
-                placeholder="Enter admin password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoFocus
-                required
-              />
-            </div>
             {error && (
-              <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">{error}</div>
+              <div className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">
+                {error}
+              </div>
             )}
+            <Input
+              type="password"
+              placeholder="Admin password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoFocus
+            />
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Verifying..." : "Login"}
+              {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
         </CardContent>

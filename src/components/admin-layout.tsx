@@ -22,7 +22,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    localStorage.removeItem("admin_password")
+    localStorage.removeItem("admin_token")
     navigate("/admin/login")
   }
 
