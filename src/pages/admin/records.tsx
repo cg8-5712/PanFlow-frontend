@@ -54,9 +54,8 @@ export default function AdminRecords() {
                 <TableHead>ID</TableHead>
                 <TableHead>IP</TableHead>
                 <TableHead>File ID</TableHead>
-                <TableHead>Token ID</TableHead>
-                <TableHead>Account ID</TableHead>
-                <TableHead>Created At</TableHead>
+                <TableHead>Account</TableHead>
+                <TableHead>Time</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -69,7 +68,6 @@ export default function AdminRecords() {
                   <TableCell className="font-mono text-xs">{r.id}</TableCell>
                   <TableCell className="font-mono text-sm">{r.ip}</TableCell>
                   <TableCell className="font-mono text-xs">{r.fs_id}</TableCell>
-                  <TableCell>{r.token_id}</TableCell>
                   <TableCell>{r.account_id}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">{new Date(r.created_at).toLocaleString()}</TableCell>
                 </TableRow>

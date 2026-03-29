@@ -54,7 +54,6 @@ export interface ParseRecord {
   fingerprint: string
   fs_id: number
   urls: string[]
-  token_id: number
   account_id: number
   user_id?: number
   created_at: string
@@ -70,20 +69,6 @@ export interface Account {
   reason: string
   used_count: number
   used_size: number
-  created_at: string
-}
-
-export interface Token {
-  id: number
-  token: string
-  token_type: 'normal' | 'daily'
-  user_type: 'guest' | 'vip' | 'svip' | 'admin'
-  count: number
-  used_count: number
-  size: number
-  used_size: number
-  switch: boolean
-  reason?: string
   created_at: string
 }
 
