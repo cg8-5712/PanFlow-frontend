@@ -4,7 +4,6 @@ import { AdminLayout } from "@/components/admin-layout"
 import HomePage from "@/pages/home"
 import LoginPage from "@/pages/login"
 import ProfilePage from "@/pages/profile"
-import AdminLoginPage from "@/pages/admin/login"
 import AdminDashboard from "@/pages/admin/dashboard"
 import AdminAccounts from "@/pages/admin/accounts"
 import AdminTokens from "@/pages/admin/tokens"
@@ -20,10 +19,12 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function AdminProtectedRoute({ children }: { children: React.ReactNode }) {
-  const isAdminLoggedIn = !!localStorage.getItem("admin_token")
-  return isAdminLoggedIn
+  const token = localStorage.getItem("access_token")
+  const userType = localStorage.getItem("user_type")
+  const isAdmin = !!token && userType === "admin"
+  return isAdmin
     ? <AdminLayout>{children}</AdminLayout>
-    : <Navigate to="/admin/login" replace />
+    : <Navigate to="/login" replace />
 }
 
 function App() {
@@ -43,20 +44,17 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* User-facing routes with Navbar */}
+        {/* User-facing routes */}
         <Route path="/" element={<><Navbar /><HomePage /></>} />
         <Route path="/login" element={<><Navbar /><LoginPage /></>} />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Navbar /><ProfilePage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/profile" element={
+          <ProtectedRoute><Navbar /><ProfilePage /></ProtectedRoute>
+        } />
+
+        {/* /admin/login → redirect to unified /login */}
+        <Route path="/admin/login" element={<Navigate to="/login" replace />} />
 
         {/* Admin routes */}
-        <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route path="/admin" element={<AdminProtectedRoute><AdminDashboard /></AdminProtectedRoute>} />
         <Route path="/admin/accounts" element={<AdminProtectedRoute><AdminAccounts /></AdminProtectedRoute>} />
         <Route path="/admin/tokens" element={<AdminProtectedRoute><AdminTokens /></AdminProtectedRoute>} />
@@ -65,7 +63,6 @@ function App() {
         <Route path="/admin/records" element={<AdminProtectedRoute><AdminRecords /></AdminProtectedRoute>} />
         <Route path="/admin/config" element={<AdminProtectedRoute><AdminConfig /></AdminProtectedRoute>} />
 
-        {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
